@@ -1,17 +1,32 @@
-// Pages/QuizReport.js
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import quizData from "../data";
 
 const QuizReport = () => {
   const location = useLocation();
   const { userAnswers } = location.state || { userAnswers: [] };
+  const [loading, setLoading] = useState(true);
 
   const totalQuestions = userAnswers.length;
-  console.log(userAnswers)
   const correctAnswers = userAnswers.filter(
     (answer) => answer.isCorrect
   ).length;
   const score = `${correctAnswers}/${totalQuestions}`;
+
+  useEffect(() => {
+    // Simulate loading delay, if needed
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000); // Adjust the delay time as needed
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-w-screen min-h-screen flex items-center justify-center bg-gray-100">
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-w-screen min-h-screen flex flex-col items-center justify-center bg-gray-100">
@@ -22,7 +37,7 @@ const QuizReport = () => {
 
       <div className="w-full max-w-7xl flex flex-wrap mt-20">
         {/* Left side - Scrollable report data */}
-        <div className="w-full md:w-3/4 p-4 overflow-y-auto max-h-screen  border-blue-300">
+        <div className="w-full md:w-3/4 p-4 overflow-y-auto max-h-screen border-blue-300">
           <div className="grid grid-cols-2 gap-4">
             {userAnswers.map((answer, index) => (
               <div
@@ -59,7 +74,6 @@ const QuizReport = () => {
                 >
                   {answer.isCorrect ? "Correct" : "Incorrect"}
                 </p>
-
               </div>
             ))}
           </div>
